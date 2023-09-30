@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io"
 	"net"
+	"strings"
 	"testing"
 	"time"
 )
@@ -19,6 +20,9 @@ func TestDial(t *testing.T) {
 		for {
 			conn, err := listener.Accept()
 			if err != nil {
+				if !strings.Contains(err.Error(), "closed network connection") {
+					t.Errorf("error which accepting - %q", err)
+				}
 				return
 			}
 			go func(conn net.Conn) { // con routine
